@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: mabanque-BNPPARIBAS
+    env: python
+    repo: https://github.com/kouakoucedric305-crypto/mabanque-BNPPARIBAS
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    # --workers 1 obligatoire pour le SSE (Server-Sent Events) sur le plan gratuit Render
+    # --timeout 120 pour laisser le temps aux requêtes longues (SSE, PDF)
+    startCommand: "python post_deploy_copy_readme.py && gunicorn app:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bnp-database
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true          # Render génère automatiquement une clé sécurisée
+      - key: ADMIN_PASSWORD
+        sync: false                  # À saisir manuellement dans le dashboard Render
+
+databases:
+  - name: bnp-database
+    plan: free
+    databaseName: elitebank_db
+    user: admin_bnp

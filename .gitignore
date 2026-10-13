@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# SQLite and local database files
+instance/*.db
+instance/*.db-journal
+
+# Application backups
+backup/
+
+# Environment
+.env
+.venv/
+venv/
+
+# Editor files
+*.swp
+*.swo
+*.tmp
